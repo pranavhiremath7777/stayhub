@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: stayhub-backend
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/stayhub
+    username: postgres
+    password: admin@1122
+
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+server:
+  port: 8080
