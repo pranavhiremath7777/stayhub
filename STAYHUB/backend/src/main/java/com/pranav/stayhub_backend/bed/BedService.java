@@ -1,5 +1,6 @@
 package com.pranav.stayhub_backend.bed;
 
+import com.pranav.stayhub_backend.common.exception.ResourceNotFoundException;
 import com.pranav.stayhub_backend.room.Room;
 import com.pranav.stayhub_backend.room.RoomRepository;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class BedService {
     public List<Bed> getBedsByRoom(Long roomId) {
 
         if (!roomRepository.existsById(roomId)) {
-            throw new RuntimeException("Room not found");
+            throw new ResourceNotFoundException("Room not found with id: " + roomId);
         }
 
         return bedRepository.findByRoomId(roomId);
@@ -36,13 +37,13 @@ public class BedService {
     public Bed getBedById(Long id) {
 
         return bedRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Bed not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Bed not found with id: " + id));
     }
 
     public Bed createBed(Long roomId, Bed bed) {
 
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new RuntimeException("Room not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Room not found with id: " + roomId));
 
         bed.setRoom(room);
 
@@ -57,8 +58,12 @@ public class BedService {
 
         Bed bed = getBedById(id);
 
-        bed.setBedNumber(updatedBed.getBedNumber());
-        bed.setStatus(updatedBed.getStatus());
+        if (updatedBed.getBedNumber() != null) {
+            bed.setBedNumber(updatedBed.getBedNumber());
+        }
+        if (updatedBed.getStatus() != null) {
+            bed.setStatus(updatedBed.getStatus());
+        }
 
         return bedRepository.save(bed);
     }

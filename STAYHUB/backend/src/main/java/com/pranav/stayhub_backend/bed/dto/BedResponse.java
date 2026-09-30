@@ -13,7 +13,7 @@ public class BedResponse {
     public BedResponse(Bed bed) {
         this.id = bed.getId();
         this.bedNumber = bed.getBedNumber();
-        this.status = bed.getStatus().name();
+        this.status = bed.getStatus() != null ? bed.getStatus().name() : null;
 
         if (bed.getRoom() != null) {
             this.roomId = bed.getRoom().getId();
